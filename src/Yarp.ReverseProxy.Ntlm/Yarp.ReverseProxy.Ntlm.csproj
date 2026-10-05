@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Yarp.ReverseProxy extension that enables proxying connection-based Windows authentication (NTLM and Kerberos/Negotiate) to destination servers</Description>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Yarp.ReverseProxy.Ntlm</RootNamespace>
+    <PackageId>Bambi.Yarp.Ntlm</PackageId>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>yarp;dotnet;reverse-proxy;aspnetcore;ntlm;kerberos;negotiate;windows-authentication</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Yarp.ReverseProxy" Version="$(YarpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Yarp.ReverseProxy.Ntlm.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/sample/">
+    <Project Path="Gateway/Gateway.csproj" />
+    <Project Path="LegacyApp/LegacyApp.csproj" />
+    <Project Path="ModernApp/ModernApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="../../src/Yarp.ReverseProxy.Ntlm/Yarp.ReverseProxy.Ntlm.csproj" />
+  </Folder>
+</Solution>

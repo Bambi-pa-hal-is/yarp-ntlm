@@ -1,0 +1,32 @@
+@page "/cases/{number}"
+@model Yarp.Sample.Ntlm.LegacyApp.Pages.Cases.DetailsModel
+@{
+    var c = Model.Case;
+    ViewData["Title"] = c.Number;
+}
+<p><a href="/cases">&laquo; Back to cases</a></p>
+<h1>@c.Number &ndash; @c.Title</h1>
+
+@if (c.MigratedTo is not null)
+{
+    <div class="notice">
+        This case has been moved to the new building permit system.
+        <a href="@c.MigratedTo">Open it in the new system &raquo;</a>
+    </div>
+}
+
+<table class="form">
+    <tr><th>Case type</th><td>@c.Type</td><th>Status</th><td><b>@c.Status</b></td></tr>
+    <tr><th>Department</th><td>@c.Department</td><th>Officer</th><td>@c.Officer</td></tr>
+    <tr><th>Applicant</th><td>@c.Applicant</td><th>Received</th><td>@c.Received.ToString("yyyy-MM-dd")</td></tr>
+    <tr><th>Description</th><td colspan="3">@c.Description</td></tr>
+</table>
+
+<h2>Case log</h2>
+<table class="grid">
+    <tr><th>Date</th><th>By</th><th>Entry</th></tr>
+    @foreach (var e in c.History.OrderByDescending(e => e.Date))
+    {
+        <tr><td>@e.Date.ToString("yyyy-MM-dd")</td><td>@e.Who</td><td>@e.What</td></tr>
+    }
+</table>

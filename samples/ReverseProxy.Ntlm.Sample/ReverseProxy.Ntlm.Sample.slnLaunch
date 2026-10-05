@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Gateway + Legacy + Modern (IIS Express)",
+    "Projects": [
+      {
+        "Path": "LegacyApp\LegacyApp.csproj",
+        "Action": "Start",
+        "DebugTarget": "IIS Express"
+      },
+      {
+        "Path": "ModernApp\ModernApp.csproj",
+        "Action": "Start",
+        "DebugTarget": "IIS Express"
+      },
+      {
+        "Path": "Gateway\Gateway.csproj",
+        "Action": "Start",
+        "DebugTarget": "IIS Express"
+      }
+    ]
+  }
+]

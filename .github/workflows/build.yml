@@ -1,0 +1,75 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          # 8.0 for the net8.0 tests, 10.0 for the SDK and the net10.0 tests.
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      # A tag like v1.2.3 publishes version 1.2.3; other builds use VersionPrefix from the csproj.
+      - name: Set package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "PACKAGE_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: dotnet build yarp-ntlm.slnx -c Release -p:ContinuousIntegrationBuild=true ${PACKAGE_VERSION:+-p:Version=$PACKAGE_VERSION}
+
+      - name: Test
+        run: dotnet test --solution yarp-ntlm.slnx -c Release --no-build
+
+      - name: Pack
+        run: dotnet pack src/Yarp.ReverseProxy.Ntlm -c Release --no-build -o artifacts ${PACKAGE_VERSION:+-p:Version=$PACKAGE_VERSION}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: packages
+          path: artifacts/*
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      # Lets NuGet/login exchange a GitHub OIDC token for a short-lived NuGet API key (Trusted Publishing).
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Log in to NuGet
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      # Pushes the .snupkg symbols package along with the .nupkg.
+      - name: Push to NuGet
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

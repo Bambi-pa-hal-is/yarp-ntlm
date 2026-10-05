@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
+
+    <Authors>Bambi på hal is</Authors>
+    <Copyright>Copyright (c) Bambi på hal is</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Bambi-pa-hal-is/yarp-ntlm</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Bambi-pa-hal-is/yarp-ntlm.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- Lowest Yarp.ReverseProxy version the library is built and tested against. -->
+    <YarpVersion>2.3.0</YarpVersion>
+  </PropertyGroup>
+
+</Project>

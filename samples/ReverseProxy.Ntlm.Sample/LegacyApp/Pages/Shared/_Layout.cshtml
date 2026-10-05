@@ -1,0 +1,53 @@
+@{
+    var employee = Employees.Find(User.Identity?.Name ?? "");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Ekdala Case Management</title>
+    <link rel="stylesheet" href="/legacy.css" />
+</head>
+<body>
+    <table class="frame" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="2" class="header">
+                <span class="logo">EKDALA MUNICIPALITY</span>
+                <span class="system">Case Management System 3.2</span>
+                <span class="user">
+                    Logged on as <b>@employee.DisplayName</b> (@User.Identity?.Name) &middot; @employee.Department
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="nav">
+                <div class="nav-title">Main menu</div>
+                <a href="/">Start page</a>
+                <a href="/cases">Cases</a>
+                <a href="/cases?status=Registered">&nbsp;&nbsp;New cases</a>
+                @if (User.HasRole(AppRoles.CaseOfficer) || User.HasRole(AppRoles.Admin))
+                {
+                    <a href="/residents">Resident register</a>
+                }
+                <div class="nav-title">New systems</div>
+                <a href="/app/permits" class="new">Building permits &raquo;</a>
+                <div class="nav-title">Your roles</div>
+                <div class="roles">
+                    @foreach (var role in User.GetRoles())
+                    {
+                        <div>&bull; @role</div>
+                    }
+                </div>
+            </td>
+            <td class="content">
+                @RenderBody()
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="footer">
+                &copy; 2009&ndash;2026 Ekdala Municipality IT Department &middot; Support: ext. 4400 &middot; Best viewed in Internet Explorer 8
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

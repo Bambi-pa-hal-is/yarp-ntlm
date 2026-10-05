@@ -1,0 +1,41 @@
+@page
+@{
+    ViewData["Title"] = "Start page";
+    var open = CaseRegistry.All.Where(c => c.IsOpen).ToList();
+}
+<h1>Start page</h1>
+
+<div class="notice">
+    <b>News 2026-09-01:</b> Building permits are now handled in the
+    <a href="/app/permits">new building permit system</a>. Existing permit cases have been migrated.
+</div>
+
+<h2>Open cases per department</h2>
+<table class="grid">
+    <tr><th>Department</th><th>Open</th><th>Awaiting information</th><th>Total this year</th></tr>
+    @foreach (var department in Departments.All)
+    {
+        var cases = CaseRegistry.All.Where(c => c.Department == department).ToList();
+        <tr>
+            <td><a href="/cases?department=@Uri.EscapeDataString(department)">@department</a></td>
+            <td class="num">@cases.Count(c => c.IsOpen)</td>
+            <td class="num">@cases.Count(c => c.Status == CaseStatus.AwaitingInfo)</td>
+            <td class="num">@cases.Count</td>
+        </tr>
+    }
+    <tr class="total"><td>Total</td><td class="num">@open.Count</td><td class="num">@open.Count(c => c.Status == CaseStatus.AwaitingInfo)</td><td class="num">@CaseRegistry.All.Count</td></tr>
+</table>
+
+<h2>Latest registered cases</h2>
+<table class="grid">
+    <tr><th>Case no.</th><th>Title</th><th>Received</th><th>Status</th></tr>
+    @foreach (var c in CaseRegistry.All.OrderByDescending(c => c.Received).Take(5))
+    {
+        <tr>
+            <td><a href="/cases/@c.Number">@c.Number</a></td>
+            <td>@c.Title</td>
+            <td>@c.Received.ToString("yyyy-MM-dd")</td>
+            <td>@c.Status</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,45 @@
+@page "/cases"
+@model Yarp.Sample.Ntlm.LegacyApp.Pages.Cases.IndexModel
+@{
+    ViewData["Title"] = "Cases";
+}
+<h1>Cases</h1>
+
+<form method="get" class="filter">
+    Department:
+    <select name="department">
+        <option value="">(all)</option>
+        @foreach (var department in Departments.All)
+        {
+            <option value="@department" selected="@(department == Model.Department)">@department</option>
+        }
+    </select>
+    Status:
+    <select name="status">
+        <option value="">(all)</option>
+        @foreach (var status in CaseStatus.All)
+        {
+            <option value="@status" selected="@(status == Model.Status)">@status</option>
+        }
+    </select>
+    Search: <input type="text" name="q" value="@Model.Query" size="20" />
+    <input type="submit" value="Search" />
+</form>
+
+<p class="hits">@Model.Results.Count case(s) found.</p>
+
+<table class="grid">
+    <tr><th>Case no.</th><th>Title</th><th>Type</th><th>Department</th><th>Officer</th><th>Received</th><th>Status</th></tr>
+    @foreach (var c in Model.Results)
+    {
+        <tr>
+            <td><a href="/cases/@c.Number">@c.Number</a></td>
+            <td>@c.Title @if (c.MigratedTo is not null) { <span class="tag">moved</span> }</td>
+            <td>@c.Type</td>
+            <td>@c.Department</td>
+            <td>@c.Officer</td>
+            <td>@c.Received.ToString("yyyy-MM-dd")</td>
+            <td>@c.Status</td>
+        </tr>
+    }
+</table>

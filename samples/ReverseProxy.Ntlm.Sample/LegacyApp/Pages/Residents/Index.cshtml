@@ -1,0 +1,39 @@
+@page "/residents"
+@model Yarp.Sample.Ntlm.LegacyApp.Pages.Residents.IndexModel
+@{
+    ViewData["Title"] = "Resident register";
+}
+<h1>Resident register</h1>
+
+<div class="notice">
+    Contains personal data. Searches are logged. Only search for residents connected to a case you are handling.
+</div>
+
+<form method="get" class="filter">
+    Name or address: <input type="text" name="q" value="@Model.Query" size="30" />
+    <input type="submit" value="Search" />
+</form>
+
+@if (Model.Results is not null)
+{
+    <p class="hits">@Model.Results.Count resident(s) found.</p>
+    <table class="grid">
+        <tr><th>Personal ID</th><th>Name</th><th>Address</th><th>District</th><th>Household</th><th>Cases</th></tr>
+        @foreach (var r in Model.Results)
+        {
+            <tr>
+                <td>@r.PersonalId</td>
+                <td>@r.Name</td>
+                <td>@r.Address</td>
+                <td>@r.District</td>
+                <td class="num">@r.HouseholdSize</td>
+                <td>
+                    @foreach (var number in r.CaseNumbers)
+                    {
+                        <a href="/cases/@number">@number</a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
