@@ -171,11 +171,7 @@ public class TestEnvironment
 
         // SslStream on Windows can't use the ephemeral key of a certificate created in memory, so round-trip through PFX.
         var pfx = certificate.Export(X509ContentType.Pfx);
-#if NET9_0_OR_GREATER
         return X509CertificateLoader.LoadPkcs12(pfx, password: null);
-#else
-        return new X509Certificate2(pfx);
-#endif
     }
 
     private sealed class TestOutputLoggerProvider(ITestOutputHelper output) : ILoggerProvider

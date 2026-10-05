@@ -12,7 +12,7 @@ NTLM and Kerberos authenticate the TCP connection rather than each request. YARP
 dotnet add package Bambi.Yarp.Ntlm
 ```
 
-It requires `Yarp.ReverseProxy` 2.3.0 or later and .NET 8 or later.
+It requires `Yarp.ReverseProxy` 2.3.0 or later and .NET 10 or later.
 
 ## Usage
 
