@@ -14,6 +14,10 @@ dotnet add package Bambi.Yarp.Ntlm
 
 It requires `Yarp.ReverseProxy` 2.3.0 or later and .NET 10 or later.
 
+### Versioning
+
+The major and minor version follow the YARP version the package is built against: `Bambi.Yarp.Ntlm` 2.3.x goes with `Yarp.ReverseProxy` 2.3.x. The patch number is for fixes in this package, so `Bambi.Yarp.Ntlm` 2.3.2 doesn't require `Yarp.ReverseProxy` 2.3.2.
+
 ## Usage
 
 ```csharp

@@ -5,7 +5,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Yarp.ReverseProxy.Ntlm</RootNamespace>
     <PackageId>Bambi.Yarp.Ntlm</PackageId>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <!-- Major.minor follows the Yarp.ReverseProxy version this is built against; the patch number is for fixes in this package. -->
+    <VersionPrefix>$(YarpVersion)</VersionPrefix>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>yarp;dotnet;reverse-proxy;aspnetcore;ntlm;kerberos;negotiate;windows-authentication</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

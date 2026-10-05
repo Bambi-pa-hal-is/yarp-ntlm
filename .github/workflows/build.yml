@@ -24,10 +24,18 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # A tag like v1.2.3 publishes version 1.2.3; other builds use VersionPrefix from the csproj.
+      # A tag like v2.3.1 publishes version 2.3.1; other builds use VersionPrefix from the csproj.
+      # The tag's major.minor must match YarpVersion in Directory.Build.props.
       - name: Set package version
         if: startsWith(github.ref, 'refs/tags/v')
-        run: echo "PACKAGE_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          yarp=$(sed -n 's:.*<YarpVersion>\(.*\)</YarpVersion>.*:\1:p' Directory.Build.props)
+          if [ "$(echo "$version" | cut -d. -f1,2)" != "$(echo "$yarp" | cut -d. -f1,2)" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match Yarp.ReverseProxy $yarp. Use v$(echo "$yarp" | cut -d. -f1,2).<patch>."
+            exit 1
+          fi
+          echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
 
       - name: Build
         run: dotnet build yarp-ntlm.slnx -c Release -p:ContinuousIntegrationBuild=true ${PACKAGE_VERSION:+-p:Version=$PACKAGE_VERSION}
